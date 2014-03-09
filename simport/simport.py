@@ -26,7 +26,7 @@ class MissingModule(Exception):
     pass
 
 
-class MissingFile(Exception):
+class BadDirectory(Exception):
     pass
 
 
@@ -42,45 +42,47 @@ def _get_module(target):
         ".../file/path|module_name:function"
 
     If a fully qualified file is specified, it implies the
-    file is not already on the Python Path. In this case,
-    the module name given will be assigned to this file.
+    file is not already on the Python Path, in which case
+    it will be added.
 
     For example, if I import /home/foo/my_code.py (and
     /home/foo is not in the python path) as
     "/home/foo/my_code.py|mycode:MyClass.mymethod"
-    then the MyClass class will live under the newly created
-    mycode module and can be referenced as mycode.MyClass
+    then /home/foo will be added to the python path and
+    the module loaded as normal.
     """
 
-    filename, sep, namespace = target.rpartition('|')
-    # print "%s/%s/%s" % (filename, sep, namespace)
-    module, sep, klass_or_function = namespace.rpartition(':')
+    print "cwd:", os.getcwd()
+    directory, sep, namespace = target.rpartition('|')
+    module, sep, class_or_function = namespace.rpartition(':')
     if not module:
         raise MissingModule("Need a module path for %s (%s)" %
                             (namespace, target))
 
-    if filename:
-        if not module in sys.modules:
-            if os.path.isfile(filename):
-                imp.load_source(module, filename)
-            else:
-                raise MissingFile("Can not find %s" % filename)
+    if directory and directory not in sys.path:
+        print "add directory:", directory
+        if not os.path.isdir(directory):
+            raise BadDirectory("No such directory: '%s'" % directory)
+        sys.path.append(directory)
 
-    if not module in sys.modules:
-        __import__(module)
-
-    if not klass_or_function:
+    if not class_or_function:
         raise MissingMethodOrFunction("No Method or Function specified")
-    klass, sep, function = klass_or_function.rpartition('.')
+
+    print "__IMPORT__"
+    __import__(module)
+
+    klass, sep, function = class_or_function.rpartition('.')
+    print "CLASS:", klass, "FUNCTION:", function
     return module, klass, function
 
 
-def simport(target):
+def load(target):
     """Get the actual implementation of the target."""
     module, klass, function = _get_module(target)
     if not klass:
+        print "NOT CLASS"
         return getattr(sys.modules[module], function)
 
-    klass_object = getattr(sys.modules[module], klass)
-    return getattr(klass_object, function)
-
+    print "DIR", dir(sys.modules[module])
+    class_object = getattr(sys.modules[module], klass)
+    return getattr(class_object, function)
