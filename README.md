@@ -11,6 +11,7 @@ Using Simport
 
 {{{
 import simport
+}}}
 
 # For modules already in the Python Path
 function = simport.load('mymodule.myfunction')
