@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from simport import simport
+import simport
 
 
 # Internal functions and classes.
