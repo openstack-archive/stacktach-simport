@@ -66,14 +66,10 @@ def _get_module(target):
         raise MissingModule("Need a module path for %s (%s)" %
                             (namespace, target))
 
-    path = ""
-    filename = ""
-    if filepath:
-        path, filename = os.path.split(filepath)
-    if path and path not in sys.path:
-        if not os.path.isdir(path):
-            raise BadDirectory("No such directory: '%s'" % path)
-        sys.path.append(path)
+    if filepath and filepath not in sys.path:
+        if not os.path.isdir(filepath):
+            raise BadDirectory("No such directory: '%s'" % filepath)
+        sys.path.append(filepath)
 
     if not class_or_function:
         raise MissingMethodOrFunction("No Method or Function specified in '%s'" % target)
