@@ -72,7 +72,7 @@ def _get_module(target):
         sys.path.append(path)
 
     if not class_or_function:
-        raise MissingMethodOrFunction("No Method or Function specified")
+        raise MissingMethodOrFunction("No Method or Function specified in '%s'" % target)
 
     __import__(module)
 
@@ -87,4 +87,6 @@ def load(target):
         return getattr(sys.modules[module], function)
 
     class_object = getattr(sys.modules[module], klass)
-    return getattr(class_object, function)
+    if function:
+        return getattr(class_object, function)
+    return class_object

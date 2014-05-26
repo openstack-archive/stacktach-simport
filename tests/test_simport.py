@@ -71,3 +71,10 @@ class TestSimport(unittest.TestCase):
         self.assertEqual(external.externalmodule,
                          sys.modules['external.externalmodule'])
         self.assertEqual(old, external.externalmodule)
+        self.assertEqual(method, external.externalmodule.Blah.method_b)
+
+    def test_import_class(self):
+        klass = simport.load("tests/external|"
+                            "external.externalmodule:Blah")
+        import external.externalmodule
+        self.assertEqual(klass, external.externalmodule.Blah)
