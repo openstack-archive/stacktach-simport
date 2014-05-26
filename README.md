@@ -17,7 +17,7 @@ Using Simport
 
     # For modules not in the Python Path
     function = simport.load('/path/to/file.py|module_name:myfunction')
-    class_method = simport.load('/path/to/file.py|module_name:MyClasss.mymethod')
+    class_method = simport.load('/path/to/file.py|module_name:MyClass.mymethod')
 
 Running Tests
 =============

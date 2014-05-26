@@ -16,6 +16,7 @@
 import imp
 import logging
 import os
+import os.path
 import sys
 
 
@@ -52,16 +53,23 @@ def _get_module(target):
     the module loaded as normal.
     """
 
-    directory, sep, namespace = target.rpartition('|')
+    filepath, sep, namespace = target.rpartition('|')
+    if sep and not filepath:
+        raise BadDirectory("Path to file not supplied.")
+
     module, sep, class_or_function = namespace.rpartition(':')
-    if not module:
+    if (sep and not module) or (filepath and not module):
         raise MissingModule("Need a module path for %s (%s)" %
                             (namespace, target))
 
-    if directory and directory not in sys.path:
-        if not os.path.isdir(directory):
-            raise BadDirectory("No such directory: '%s'" % directory)
-        sys.path.append(directory)
+    path = ""
+    filename = ""
+    if filepath:
+        path, filename = os.path.split(filepath)
+    if path and path not in sys.path:
+        if not os.path.isdir(path):
+            raise BadDirectory("No such directory: '%s'" % path)
+        sys.path.append(path)
 
     if not class_or_function:
         raise MissingMethodOrFunction("No Method or Function specified")

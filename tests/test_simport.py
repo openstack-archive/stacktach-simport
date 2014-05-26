@@ -16,8 +16,9 @@ class DummyClass(object):
 
 class TestSimport(unittest.TestCase):
     def test_bad_targets(self):
-        self.assertRaises(simport.MissingModule, simport._get_module,
-                          "missing.py")
+        self.assertRaises(simport.BadDirectory, simport._get_module,
+                          "|foo.Class")
+
         self.assertRaises(simport.MissingModule, simport._get_module,
                           "missing.py|")
 
@@ -25,6 +26,8 @@ class TestSimport(unittest.TestCase):
                           "simport_tests/localmodule.py|")
         self.assertRaises(simport.MissingModule, simport._get_module,
                           "simport_tests/localmodule.py|Foo")
+        self.assertRaises(simport.BadDirectory, simport._get_module,
+                          "/does/not/exist/foo.py|foo:Class")
 
         self.assertFalse("AnyModuleName" in sys.modules)
         self.assertRaises(simport.MissingMethodOrFunction, simport._get_module,
