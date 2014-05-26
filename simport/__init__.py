@@ -74,22 +74,28 @@ def _get_module(target):
     if not class_or_function:
         raise MissingMethodOrFunction("No Method or Function specified in '%s'" % target)
 
-    try:
-        __import__(module)
-    except ImportError as e:
-        raise ImportFailed("Failed to import '%s'. Error: %s" % (module, e))
+    if module:
+        try:
+            __import__(module)
+        except ImportError as e:
+            raise ImportFailed("Failed to import '%s'. Error: %s" % (module, e))
 
     klass, sep, function = class_or_function.rpartition('.')
     return module, klass, function
 
 
-def load(target):
+def load(target, source_module=None):
     """Get the actual implementation of the target."""
     module, klass, function = _get_module(target)
+    if not module and source_module:
+        module = source_module
+    if not module:
+        raise MissingModule("No module name supplied or source_module provided.")
+    actual_module = sys.modules[module]
     if not klass:
-        return getattr(sys.modules[module], function)
+        return getattr(actual_module, function)
 
-    class_object = getattr(sys.modules[module], klass)
+    class_object = getattr(actual_module, klass)
     if function:
         return getattr(class_object, function)
     return class_object

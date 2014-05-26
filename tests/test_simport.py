@@ -14,6 +14,11 @@ class DummyClass(object):
         pass
 
 
+class LocalClass(object):
+    def my_method(self):
+        pass
+
+
 class TestSimport(unittest.TestCase):
     def test_bad_targets(self):
         self.assertRaises(simport.BadDirectory, simport._get_module,
@@ -78,3 +83,7 @@ class TestSimport(unittest.TestCase):
                             "external.externalmodule:Blah")
         import external.externalmodule
         self.assertEqual(klass, external.externalmodule.Blah)
+
+    def test_local_class(self):
+        klass = simport.load("LocalClass", __name__)
+        self.assertEqual(klass, LocalClass)
