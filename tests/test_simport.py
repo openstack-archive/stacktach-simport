@@ -39,7 +39,7 @@ class TestSimport(unittest.TestCase):
             simport._get_module("tests|"
                                 "localmodule:Foo.method_a"))
 
-        self.assertRaises(ImportError, simport._get_module,
+        self.assertRaises(simport.ImportFailed, simport._get_module,
                           "tests|that_module:function_a")
 
     def test_bad_load(self):

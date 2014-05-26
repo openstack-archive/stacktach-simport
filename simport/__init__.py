@@ -35,6 +35,10 @@ class MissingMethodOrFunction(Exception):
     pass
 
 
+class ImportFailed(Exception):
+    pass
+
+
 def _get_module(target):
     """Import a named class, module, method or function.
 
@@ -74,7 +78,10 @@ def _get_module(target):
     if not class_or_function:
         raise MissingMethodOrFunction("No Method or Function specified in '%s'" % target)
 
-    __import__(module)
+    try:
+        __import__(module)
+    except ImportError as e:
+        raise ImportFailed("Failed to import '%s'. Error: %s" % (module, e))
 
     klass, sep, function = class_or_function.rpartition('.')
     return module, klass, function
