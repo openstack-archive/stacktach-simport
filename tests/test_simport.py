@@ -20,14 +20,14 @@ class TestSimport(unittest.TestCase):
                           "|foo.Class")
 
         self.assertRaises(simport.MissingModule, simport._get_module,
-                          "missing.py|")
+                          "missing|")
 
         self.assertRaises(simport.MissingModule, simport._get_module,
-                          "simport_tests/localmodule.py|")
+                          "simport_tests|")
         self.assertRaises(simport.MissingModule, simport._get_module,
-                          "simport_tests/localmodule.py|Foo")
+                          "simport_tests|Foo")
         self.assertRaises(simport.BadDirectory, simport._get_module,
-                          "/does/not/exist/foo.py|foo:Class")
+                          "/does/not/exist|foo:Class")
 
         self.assertFalse("AnyModuleName" in sys.modules)
         self.assertRaises(simport.MissingMethodOrFunction, simport._get_module,
