@@ -44,15 +44,19 @@ def _get_module(target):
 
     Accepts these formats:
         ".../file/path|module_name:Class.method"
+        ".../file/path|module_name:Class"
         ".../file/path|module_name:function"
+        "module_name:Class"
+        "module_name:function"
+        "module_name:Class.function"
 
-    If a fully qualified file is specified, it implies the
-    file is not already on the Python Path, in which case
+    If a fully qualified directory is specified, it implies the
+    directory is not already on the Python Path, in which case
     it will be added.
 
-    For example, if I import /home/foo/my_code.py (and
+    For example, if I import /home/foo (and
     /home/foo is not in the python path) as
-    "/home/foo/my_code.py|mycode:MyClass.mymethod"
+    "/home/foo|mycode:MyClass.mymethod"
     then /home/foo will be added to the python path and
     the module loaded as normal.
     """

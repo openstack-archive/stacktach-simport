@@ -14,10 +14,14 @@ Using Simport
     # For modules already in the Python Path
     function = simport.load('mymodule.myfunction')
     class_method = simport.load('mymodule:MyClass.mymethod')
+    klass = simport.load('mymodule:MyClass')  # uninstanstiated.
 
     # For modules not in the Python Path
-    function = simport.load('/path/to/file|module_name:myfunction')
-    class_method = simport.load('/path/to/module|module_name:MyClass.mymethod')
+    function = simport.load('/path/to/dir|module_name:myfunction')
+    class_method = simport.load('/path/to/dir|module_name:MyClass.mymethod')
+
+Look at the tests for some interesting naming conventions for
+specifying relative modules, etc. 
 
 Running Tests
 =============
