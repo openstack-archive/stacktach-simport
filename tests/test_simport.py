@@ -1,3 +1,18 @@
+# Copyright (c) 2014 Dark Secret Software Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import sys
 import unittest
 
@@ -40,9 +55,9 @@ class TestSimport(unittest.TestCase):
         self.assertFalse("AnyModuleName" in sys.modules)
 
     def test_good_external_targets(self):
-        self.assertEquals(("localmodule", "Foo", "method_a"),
-                          simport._get_module("tests|"
-                                              "localmodule:Foo.method_a"))
+        self.assertEqual(("localmodule", "Foo", "method_a"),
+                         simport._get_module("tests|"
+                                             "localmodule:Foo.method_a"))
 
         self.assertRaises(simport.ImportFailed, simport._get_module,
                           "tests|that_module:function_a")
@@ -52,18 +67,19 @@ class TestSimport(unittest.TestCase):
                           "test_simport:missing")
 
     def test_good_load_internal(self):
-        self.assertEquals(dummy_function,
-                          simport.load("test_simport:dummy_function"))
-        self.assertEquals(DummyClass.method_a,
-                          simport.load("test_simport:DummyClass.method_a"))
+        self.assertEqual(dummy_function,
+                         simport.load("test_simport:dummy_function"))
+        self.assertEqual(DummyClass.method_a,
+                         simport.load("test_simport:DummyClass.method_a"))
 
     def test_good_load_local(self):
         method = simport.load("tests|"
                               "localmodule:Foo.method_a")
         import localmodule
-        self.assertEquals(method, localmodule.Foo.method_a)
-        self.assertEquals(localmodule.function_a,
-                          simport.load("localmodule:function_a"))
+
+        self.assertEqual(method, localmodule.Foo.method_a)
+        self.assertEqual(localmodule.function_a,
+                         simport.load("localmodule:function_a"))
 
     def test_good_load_external(self):
         method = simport.load("tests/external|"
@@ -82,6 +98,7 @@ class TestSimport(unittest.TestCase):
         klass = simport.load("tests/external|"
                              "external.externalmodule:Blah")
         import external.externalmodule
+
         self.assertEqual(klass, external.externalmodule.Blah)
 
     def test_local_class(self):

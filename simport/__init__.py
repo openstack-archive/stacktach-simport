@@ -75,8 +75,8 @@ def _get_module(target):
         sys.path.append(filepath)
 
     if not class_or_function:
-        raise MissingMethodOrFunction("No Method or Function specified in "
-                                      "'%s'" % target)
+        raise MissingMethodOrFunction(
+            "No Method or Function specified in '%s'" % target)
 
     if module:
         try:
@@ -95,8 +95,8 @@ def load(target, source_module=None):
     if not module and source_module:
         module = source_module
     if not module:
-        raise MissingModule("No module name supplied or "
-                            "source_module provided.")
+        raise MissingModule(
+            "No module name supplied or source_module provided.")
     actual_module = sys.modules[module]
     if not klass:
         return getattr(actual_module, function)
