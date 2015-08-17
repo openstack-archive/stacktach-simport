@@ -41,21 +41,21 @@ class TestSimport(unittest.TestCase):
 
     def test_good_external_targets(self):
         self.assertEquals(("localmodule", "Foo", "method_a"),
-            simport._get_module("tests|"
-                                "localmodule:Foo.method_a"))
+                          simport._get_module("tests|"
+                                              "localmodule:Foo.method_a"))
 
         self.assertRaises(simport.ImportFailed, simport._get_module,
                           "tests|that_module:function_a")
 
     def test_bad_load(self):
         self.assertRaises(AttributeError, simport.load,
-                                    "test_simport:missing")
+                          "test_simport:missing")
 
     def test_good_load_internal(self):
         self.assertEquals(dummy_function,
-                simport.load("test_simport:dummy_function"))
+                          simport.load("test_simport:dummy_function"))
         self.assertEquals(DummyClass.method_a,
-                simport.load("test_simport:DummyClass.method_a"))
+                          simport.load("test_simport:DummyClass.method_a"))
 
     def test_good_load_local(self):
         method = simport.load("tests|"
@@ -63,11 +63,11 @@ class TestSimport(unittest.TestCase):
         import localmodule
         self.assertEquals(method, localmodule.Foo.method_a)
         self.assertEquals(localmodule.function_a,
-                simport.load("localmodule:function_a"))
+                          simport.load("localmodule:function_a"))
 
     def test_good_load_external(self):
         method = simport.load("tests/external|"
-                            "external.externalmodule:Blah.method_b")
+                              "external.externalmodule:Blah.method_b")
 
         self.assertTrue('external.externalmodule' in sys.modules)
         old = sys.modules['external.externalmodule']
@@ -80,7 +80,7 @@ class TestSimport(unittest.TestCase):
 
     def test_import_class(self):
         klass = simport.load("tests/external|"
-                            "external.externalmodule:Blah")
+                             "external.externalmodule:Blah")
         import external.externalmodule
         self.assertEqual(klass, external.externalmodule.Blah)
 

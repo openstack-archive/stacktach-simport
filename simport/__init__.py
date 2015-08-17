@@ -13,7 +13,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import imp
 import logging
 import os
 import os.path
@@ -76,13 +75,15 @@ def _get_module(target):
         sys.path.append(filepath)
 
     if not class_or_function:
-        raise MissingMethodOrFunction("No Method or Function specified in '%s'" % target)
+        raise MissingMethodOrFunction("No Method or Function specified in "
+                                      "'%s'" % target)
 
     if module:
         try:
             __import__(module)
         except ImportError as e:
-            raise ImportFailed("Failed to import '%s'. Error: %s" % (module, e))
+            raise ImportFailed("Failed to import '%s'. "
+                               "Error: %s" % (module, e))
 
     klass, sep, function = class_or_function.rpartition('.')
     return module, klass, function
@@ -94,7 +95,8 @@ def load(target, source_module=None):
     if not module and source_module:
         module = source_module
     if not module:
-        raise MissingModule("No module name supplied or source_module provided.")
+        raise MissingModule("No module name supplied or "
+                            "source_module provided.")
     actual_module = sys.modules[module]
     if not klass:
         return getattr(actual_module, function)
